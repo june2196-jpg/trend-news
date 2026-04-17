@@ -1,1 +1,418 @@
-/* Add styles here */
+:root {
+  --bg: #07111f;
+  --bg-soft: #0c1b30;
+  --panel: rgba(8, 19, 36, 0.78);
+  --panel-strong: rgba(5, 13, 25, 0.88);
+  --line: rgba(255, 255, 255, 0.09);
+  --text: #f5f7fb;
+  --muted: #a7b4c8;
+  --accent: #63e6be;
+  --accent-2: #78dce8;
+  --accent-3: #ffb454;
+  --shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(120, 220, 232, 0.18), transparent 24rem),
+    radial-gradient(circle at top right, rgba(99, 230, 190, 0.14), transparent 28rem),
+    linear-gradient(180deg, #08111d 0%, #0a1629 50%, #06101c 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 90%);
+}
+
+code {
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.82em;
+}
+
+.page-shell {
+  width: min(1240px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 4rem;
+}
+
+.dashboard {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 1.75rem;
+  background: var(--panel);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow);
+}
+
+.hero {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  background:
+    linear-gradient(135deg, rgba(7, 32, 54, 0.92), rgba(8, 19, 36, 0.8)),
+    radial-gradient(circle at right top, rgba(99, 230, 190, 0.12), transparent 18rem);
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto -4rem -4rem auto;
+  width: 14rem;
+  height: 14rem;
+  border-radius: 50%;
+  background: rgba(120, 220, 232, 0.12);
+  filter: blur(10px);
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.hero h1,
+.panel h2,
+.info-card h3,
+.trend-title {
+  margin: 0;
+}
+
+.hero h1 {
+  margin-top: 0.85rem;
+  max-width: 12ch;
+  font-size: clamp(2.4rem, 5vw, 4.7rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+}
+
+.hero-description,
+.section-note,
+.info-card p,
+.snapshot-row span,
+.trend-meta,
+.trend-traffic,
+.metric-hint {
+  color: var(--muted);
+}
+
+.hero-description {
+  margin: 1rem 0 0;
+  max-width: 52rem;
+  line-height: 1.8;
+}
+
+.hero-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.status-pill,
+.metric-card,
+.trend-item,
+.info-card,
+.snapshot-row {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.status-pill {
+  padding: 0.8rem 1rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+}
+
+.status-pill strong {
+  color: var(--text);
+}
+
+.metrics {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metric-card {
+  padding: 1.4rem;
+  border-radius: 1.5rem;
+}
+
+.metric-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.metric-value {
+  margin: 0.85rem 0 0;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.metric-hint {
+  margin: 0.5rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.content-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.92fr);
+}
+
+.content-main,
+.content-side,
+.info-stack,
+.snapshot-list,
+.trend-list {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.chart-panel,
+.info-panel,
+.snapshot-panel,
+.content-main > .panel {
+  padding: 1.5rem;
+}
+
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.section-head h2 {
+  margin-top: 0.55rem;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+}
+
+.section-note {
+  max-width: 25rem;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  font-size: 0.88rem;
+}
+
+.legend-swatch {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+
+.chart-wrap {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01)),
+    var(--panel-strong);
+}
+
+#trend-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.axis-label,
+.grid-line-label {
+  fill: #8fa2bb;
+  font-size: 12px;
+}
+
+.grid-line {
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-dasharray: 4 8;
+}
+
+.axis-line {
+  stroke: rgba(255, 255, 255, 0.14);
+}
+
+.chart-line {
+  fill: none;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-dot {
+  stroke: #08111d;
+  stroke-width: 2;
+}
+
+.trend-item {
+  display: grid;
+  gap: 0.9rem;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  padding: 1rem 1.1rem;
+  border-radius: 1.5rem;
+}
+
+.rank-badge {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 1rem;
+  background: rgba(120, 220, 232, 0.14);
+  color: var(--accent-2);
+  font-weight: 800;
+}
+
+.trend-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.trend-meta,
+.trend-traffic {
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+.trend-score {
+  text-align: right;
+}
+
+.trend-score strong {
+  display: block;
+  font-size: 1.7rem;
+  letter-spacing: -0.04em;
+}
+
+.trend-score span {
+  font-size: 0.72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+}
+
+.info-card {
+  padding: 1rem;
+  border-radius: 1.25rem;
+}
+
+.info-card h3 {
+  font-size: 1rem;
+}
+
+.info-card p {
+  margin: 0.55rem 0 0;
+  line-height: 1.7;
+}
+
+.snapshot-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.1rem;
+  border-radius: 1.15rem;
+}
+
+.snapshot-row strong {
+  font-size: 1rem;
+  text-align: right;
+}
+
+@media (max-width: 1080px) {
+  .metrics,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 1rem, 40rem);
+    padding-top: 1rem;
+  }
+
+  .chart-panel,
+  .info-panel,
+  .snapshot-panel,
+  .content-main > .panel,
+  .hero {
+    padding: 1.2rem;
+  }
+
+  .metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .trend-item {
+    grid-template-columns: auto 1fr;
+  }
+
+  .trend-score {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
+
+  .snapshot-row {
+    align-items: start;
+    flex-direction: column;
+  }
+}
