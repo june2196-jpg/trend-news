@@ -44,7 +44,7 @@ function slugify(value) {
   return String(value || "")
     .toLowerCase()
     .normalize("NFKD")
-    .replace(/[^\w\s-]/g, "")
+    .replace(/[^\p{L}\p{N}\s-]/gu, "")
     .trim()
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
@@ -113,7 +113,7 @@ function parseTrendItem(block, index) {
 
   return {
     id: `trend-${index + 1}`,
-    slug: slugify(title || `trend-${index + 1}`),
+    slug: slugify(title || `trend-${index + 1}`) || `trend-${index + 1}`,
     title,
     traffic,
     pubDate,
@@ -172,23 +172,55 @@ function text(body) {
 }
 
 async function fetchTrends(geo) {
-  const feedUrl = `https://trends.google.com/trending/rss?geo=${encodeURIComponent(geo)}`;
-  const response = await fetch(feedUrl, {
-    headers: {
-      "user-agent": "Mozilla/5.0",
-      accept: "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8",
-    },
-  });
+  const feedUrls = [
+    `https://trends.google.com/trending/rss?geo=${encodeURIComponent(geo)}`,
+    `https://trends.google.com/trending/rss?geo=${encodeURIComponent(geo)}&hl=en-US`,
+  ];
 
-  if (!response.ok) {
-    throw new Error("Failed to fetch Google Trends");
+  let lastError = null;
+
+  for (const feedUrl of feedUrls) {
+    try {
+      const response = await fetch(feedUrl, {
+        headers: {
+          "user-agent": "Mozilla/5.0",
+          accept: "application/rss+xml, application/xml;q=0.9, text/xml;q=0.8",
+          "accept-language": "en-US,en;q=0.9,ko;q=0.8,ja;q=0.7",
+          "cache-control": "no-cache",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Google Trends HTTP ${response.status}`);
+      }
+
+      const xmlBody = await response.text();
+      const items = extractItems(xmlBody)
+        .map(parseTrendItem)
+        .filter((item) => item.title);
+
+      if (!items.length) {
+        throw new Error("Google Trends returned no items");
+      }
+
+      const seenSlugs = new Map();
+
+      return items.map((item, index) => {
+        const baseSlug = item.slug || `trend-${index + 1}`;
+        const nextCount = (seenSlugs.get(baseSlug) || 0) + 1;
+        seenSlugs.set(baseSlug, nextCount);
+
+        return {
+          ...item,
+          slug: nextCount === 1 ? baseSlug : `${baseSlug}-${nextCount}`,
+        };
+      });
+    } catch (error) {
+      lastError = error;
+    }
   }
 
-  const xmlBody = await response.text();
-
-  return extractItems(xmlBody)
-    .map(parseTrendItem)
-    .filter((item) => item.title);
+  throw lastError || new Error("Failed to fetch Google Trends");
 }
 
 async function fetchNews(geo, query) {
@@ -262,6 +294,12 @@ function buildLayout({ title, description, canonical, content, structuredData, i
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4898037749323009" crossorigin="anonymous"></script>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-4898037749323009",
+      enable_page_level_ads: true
+    });
+  </script>
   ${jsonLd}
 </head>
 <body>
