@@ -1,0 +1,29 @@
+{
+  "name": "trend-news-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "build:cf": "opennextjs-cloudflare build",
+    "start": "next start",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "seed:firestore": "node scripts/seed-firestore.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
+    "firebase": "^11.0.2",
+    "firebase-admin": "^13.0.1",
+    "next": "^15.0.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^3.8.1",
+    "tailwindcss": "^4.2.2"
+  },
+  "devDependencies": {
+    "@opennextjs/cloudflare": "^1.19.1",
+    "wrangler": "^4.83.0"
+  }
+}
