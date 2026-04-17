@@ -4,9 +4,10 @@ Google Trends와 Google News RSS를 Cloudflare Worker에서 직접 수집하고,
 
 ## 현재 구조
 
+- `_worker.js`: Cloudflare Pages가 인식하는 진입점
 - `worker.js`: Google Trends/Google News 수집, SSR HTML 생성, `robots.txt`, `sitemap.xml`, `ads.txt` 응답
 - `style.css`: 목록/상세 페이지 공통 스타일
-- `index.html`, `main.js`: 보조 정적 자산
+- `index.html`, `main.js`: 정적 자산 fallback
 
 핵심 페이지는 Worker가 직접 HTML을 반환합니다.
 
@@ -41,7 +42,13 @@ google.com, pub-4898037749323009, DIRECT, f08c47fec0942fa0
 
 ## Cloudflare 배포
 
-현재 `wrangler.jsonc`는 `worker.js`를 진입점으로 사용합니다.
+### Cloudflare Pages
+
+현재 소스는 Pages 배포를 위해 루트의 `_worker.js`를 사용합니다. Pages 프로젝트에서 루트 디렉터리를 그대로 배포하면 `_worker.js`가 라우팅을 처리합니다.
+
+### Cloudflare Workers
+
+`wrangler.jsonc`는 기존처럼 `worker.js`를 진입점으로 사용합니다.
 
 배포:
 
