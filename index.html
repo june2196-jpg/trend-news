@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Trend News Dashboard</title>
+  <title>Trend News</title>
   <meta
     name="description"
-    content="Cloudflare에 바로 게시할 수 있는 정적 HTML 기반 트렌드 뉴스 대시보드"
+    content="Google Trends 키워드와 관련 뉴스를 Cloudflare에서 바로 확인하는 정적 페이지"
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,85 +18,47 @@
 </head>
 <body>
   <div class="page-shell">
-    <main class="dashboard">
-      <section class="hero panel">
-        <div class="hero-copy">
-          <p class="eyebrow">Live Trend Briefing</p>
-          <h1>트렌드 신호를 한 화면에서 읽는 정적 대시보드</h1>
-          <p class="hero-description">
-            Next/Firebase 의존성을 제거하고, <code>index.html</code> 기준으로 바로 배포할 수 있게
-            재구성한 Cloudflare용 정적 페이지입니다.
-          </p>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./">Trend News</a>
+        <div class="topbar-actions">
+          <label class="country-switcher" for="geo-select">
+            <span>지역</span>
+            <select id="geo-select" aria-label="트렌드 지역 선택">
+              <option value="KR">KR</option>
+              <option value="US">US</option>
+              <option value="JP">JP</option>
+            </select>
+          </label>
         </div>
-        <div class="hero-status" id="hero-status"></div>
+      </header>
+
+      <section class="hero">
+        <p class="eyebrow" id="hero-eyebrow">Google Trends</p>
+        <h1 id="hero-title">지금 많이 검색되는 키워드</h1>
+        <p class="hero-meta" id="hero-meta"></p>
       </section>
 
-      <section class="metrics" id="metrics"></section>
-
-      <section class="content-grid">
-        <div class="content-main">
-          <section class="panel chart-panel">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Trend History</p>
-                <h2>시간 흐름에 따른 상위 키워드 점수 변화</h2>
-              </div>
-              <p class="section-note">
-                최근 스냅샷 기준 상위 키워드 3개의 흐름을 SVG 라인 차트로 렌더링합니다.
-              </p>
-            </div>
-            <div class="chart-legend" id="chart-legend"></div>
-            <div class="chart-wrap">
-              <svg id="trend-chart" viewBox="0 0 760 320" role="img" aria-label="트렌드 점수 차트"></svg>
-            </div>
-          </section>
-
-          <section class="panel">
-            <div class="section-head">
-              <div>
-                <p class="eyebrow">Live Ranking</p>
-                <h2>현재 트렌드 랭킹</h2>
-              </div>
-              <p class="section-note">
-                상위 키워드, 점수, 트래픽 추정치, 마지막 반영 시각을 카드 목록으로 정리했습니다.
-              </p>
-            </div>
-            <div class="trend-list" id="trend-list"></div>
-          </section>
+      <section class="view view-active" id="trend-view" aria-labelledby="hero-title">
+        <div class="section-head">
+          <h2>실시간 트렌드</h2>
+          <button class="ghost-button" id="refresh-button" type="button">새로고침</button>
         </div>
+        <div class="status-banner" id="trend-status"></div>
+        <div class="trend-grid" id="trend-list"></div>
+      </section>
 
-        <aside class="content-side">
-          <section class="panel info-panel">
-            <p class="eyebrow">Data Flow</p>
-            <h2>연동 방식</h2>
-            <div class="info-stack">
-              <article class="info-card">
-                <h3>정적 데이터 모델</h3>
-                <p>
-                  실시간 구독 대신 <code>main.js</code> 안의 데이터 배열을 기준으로 랭킹과 이력 차트를 렌더링합니다.
-                </p>
-              </article>
-              <article class="info-card">
-                <h3>Cloudflare 배포 단순화</h3>
-                <p>
-                  빌드 없이 <code>index.html</code>, <code>style.css</code>, <code>main.js</code>만 업로드해도 동작합니다.
-                </p>
-              </article>
-              <article class="info-card">
-                <h3>모바일 우선 레이아웃</h3>
-                <p>
-                  작은 화면에서는 핵심 지표가 먼저 보이고, 넓은 화면에서는 차트와 랭킹이 나란히 보입니다.
-                </p>
-              </article>
-            </div>
-          </section>
-
-          <section class="panel snapshot-panel">
-            <p class="eyebrow">Snapshot</p>
-            <h2>지금 보이는 신호</h2>
-            <div class="snapshot-list" id="snapshot-list"></div>
-          </section>
-        </aside>
+      <section class="view" id="detail-view" aria-labelledby="detail-title" hidden>
+        <div class="detail-header">
+          <a class="back-link" href="./" id="back-link">목록으로</a>
+          <div>
+            <p class="eyebrow">Related News</p>
+            <h2 id="detail-title">상세 뉴스</h2>
+            <p class="detail-subtitle" id="detail-subtitle"></p>
+          </div>
+        </div>
+        <div class="status-banner" id="detail-status"></div>
+        <div class="news-list" id="news-list"></div>
       </section>
     </main>
   </div>
